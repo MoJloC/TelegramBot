@@ -1,37 +1,47 @@
 package net.mojloc.telegrambot;
 
-import org.aspectj.lang.annotation.Before;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
+@Slf4j
 class TelegramBotApplicationTests {
-    private static Logger logger = LoggerFactory.getLogger(TelegramBotApplicationTests.class);
     @Autowired
     private ConfigurableApplicationContext context;
+    private static RestTemplate restTemplate;
 
     @BeforeAll
     static void init() {
-        logger.info("Tests started");
+        log.info("Tests started");
+        restTemplate = new RestTemplate();
     }
 
     @Test
     void testContextLoads() {
         Assertions.assertTrue(context.isActive());
+        log.info("Application Context {} is active", context);
+    }
+
+    @Test
+    void testWebConnection() {
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/rest/v1/ConnectionTest",
+                                                              "", String.class);
+        log.info("************************* " + response.getStatusCodeValue() + " *************************");
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
     @AfterAll
     static void finish() {
-        logger.info("Tests finished..");
+        log.info("Tests finished..");
     }
 
 }

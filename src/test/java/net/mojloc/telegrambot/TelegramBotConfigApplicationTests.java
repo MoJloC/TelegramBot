@@ -1,6 +1,6 @@
 package net.mojloc.telegrambot;
 
-import lombok.Data;
+import net.mojloc.telegrambot.Config.TelegramBotConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -14,9 +14,13 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
 @Slf4j
-class TelegramBotApplicationTests {
+class TelegramBotConfigApplicationTests {
     @Autowired
     private ConfigurableApplicationContext context;
+
+    @Autowired
+    private TelegramBotConfig telegramBotConfig;
+
     private static RestTemplate restTemplate;
 
     @BeforeAll
@@ -33,10 +37,17 @@ class TelegramBotApplicationTests {
 
     @Test
     void testWebConnection() {
+
         ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/rest/v1/ConnectionTest",
                                                               "", String.class);
         log.info("************************* " + response.getStatusCodeValue() + " *************************");
         Assertions.assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void testBotObjectCreation() {
+        Assertions.assertEquals("TheShushaBot", telegramBotConfig.getUsername());
+        log.info("************************* " + telegramBotConfig.getUsername() + " *************************");
     }
 
     @AfterAll

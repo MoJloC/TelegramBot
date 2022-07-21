@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Set;
-
 @Configuration
 @Slf4j
 public class BotApplicationConfig {

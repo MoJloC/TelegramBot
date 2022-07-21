@@ -5,12 +5,13 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.lang.reflect.InvocationTargetException;
 
-@Component
+@Service("messageHandler")
 @FieldDefaults (makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
 public class MessageHandler {

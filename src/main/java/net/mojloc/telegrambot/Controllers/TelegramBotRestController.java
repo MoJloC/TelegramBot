@@ -29,7 +29,7 @@ public class TelegramBotRestController {
     public void connectionTest() {}
 
     @PostMapping("/")
-    public BotApiMethod onUpdateReceived(@RequestBody Update update, RequestEntity<String> request) {
+    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update, RequestEntity<String> request) {
         log.info("********************** Parameters of Request ********************** ");
         log.info("Url: " + request.getUrl());
         log.info("Body: " + request.getBody());

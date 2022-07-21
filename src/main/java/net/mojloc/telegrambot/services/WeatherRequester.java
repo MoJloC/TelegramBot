@@ -28,9 +28,8 @@ public class WeatherRequester {
         this.apiKey = apiKey;
     }
 
-    public CurrentWeather getCurrentWeather (String cityName) throws JsonProcessingException, HttpClientErrorException {
-        CurrentWeather currentWeather = new CurrentWeather();
-        ObjectMapper objectMapper = new ObjectMapper();
+    public ResponseEntity<String> getCurrentWeather (String cityName) throws HttpClientErrorException {
+
         String url = new StringBuilder().append(requestUrl)
                                         .append("weather?q=")
                                         .append(cityName)
@@ -42,19 +41,7 @@ public class WeatherRequester {
         ResponseEntity<String> weatherInJson = restTemplate.getForEntity(url, String.class);
         log.info("Received response from " + requestUrl + "\n" + weatherInJson);
 
-        JsonNode rootNode = objectMapper.readTree(weatherInJson.getBody());
-        ArrayNode jsonWeatherArray = (ArrayNode) rootNode.get("weather");
-        currentWeather.setResponseStatus(rootNode.path("cod").asInt());
-        currentWeather.setCityName(rootNode.path("name").asText());
-        currentWeather.setDescription(jsonWeatherArray.get(0).path("description").asText());
-        currentWeather.setTemp(rootNode.path("main").path("temp").asLong());
-        currentWeather.setTempFeelsLike(rootNode.path("main").path("feels_like").asLong());
-        currentWeather.setPressure(rootNode.path("main").path("pressure").asInt());
-        currentWeather.setHumidity(rootNode.path("main").path("humidity").asLong());
-        currentWeather.setVisibility(rootNode.path("visibility").asInt());
-        currentWeather.setWindSpeed(rootNode.path("wind").path("speed").asLong());
-
-        return currentWeather;
+        return weatherInJson;
 
     }
 }

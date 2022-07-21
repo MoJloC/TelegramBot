@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults (level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrentWeather {
+public class CurrentWeather implements Weather {
     int responseStatus;
     String cityName;
     int visibility;
@@ -20,7 +20,7 @@ public class CurrentWeather {
     Long windSpeed;
 
     @Override
-    public String toString() {
+    public String prepareMessageText() {
         return ("Погода в городе " + getCityName() + ": " + getDescription() + "\n"
                 + "Температура: " + (getTemp()-273) + " C (ощущается как " + (getTempFeelsLike()-273) + " C)\n"
                 + "Давление: " + (getPressure()*0.75) + " мм Рт.ст.\n"

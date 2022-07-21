@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.mojloc.telegrambot.model.CurrentWeather;
 import net.mojloc.telegrambot.model.Messages;
+import net.mojloc.telegrambot.model.Weather;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -21,13 +23,16 @@ import java.util.List;
 public class WeatherCommandHandler extends CommandHandler{
     WeatherRequester weatherRequester;
     MessageParser messageParser;
+    WeatherJsonParser weatherJsonParser;
 
     String command = "/weather";
 
     @Autowired
-    public WeatherCommandHandler(WeatherRequester weatherRequester, MessageParser messageParser) {
+    public WeatherCommandHandler(WeatherRequester weatherRequester, MessageParser messageParser,
+                                 @Qualifier("currentWeatherJsonParser") WeatherJsonParser weatherJsonParser) {
         this.weatherRequester = weatherRequester;
         this.messageParser = messageParser;
+        this.weatherJsonParser = weatherJsonParser;
     }
 
     @Override
@@ -43,13 +48,18 @@ public class WeatherCommandHandler extends CommandHandler{
             return sendMessage;
         }
 
+        String cityName = attributes.get(0);
+
         try {
             log.info("Current weather request for City " + attributes.get(0) +
                      " from user " + incomingMessage.getFrom().getFirstName() +
                      " " + incomingMessage.getFrom().getLastName());
-            CurrentWeather currentWeather = weatherRequester.getCurrentWeather(attributes.get(0));
+
+            ResponseEntity<String> responseFromWeatherProvider = weatherRequester.getCurrentWeather(cityName);
+            Weather currentWeather = weatherJsonParser.parseJson(responseFromWeatherProvider);
+            sendMessage.setText(currentWeather.prepareMessageText());
+
             log.info("Request completed successfully");
-            sendMessage.setText(currentWeather.toString());
         } catch (JsonProcessingException e) {
             log.error("Error in JSON processing at WeatherRequester!", e);
             sendMessage.setText(Messages.PRINT_WEATHER_ERROR.getMessage());

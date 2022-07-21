@@ -30,6 +30,7 @@ public class WeatherRequester {
 
     public CurrentWeather getCurrentWeather (String cityName) throws JsonProcessingException, HttpClientErrorException {
         CurrentWeather currentWeather = new CurrentWeather();
+        ObjectMapper objectMapper = new ObjectMapper();
         String url = new StringBuilder().append(requestUrl)
                                         .append("weather?q=")
                                         .append(cityName)
@@ -40,7 +41,7 @@ public class WeatherRequester {
         log.info("Sending request for current weather to " + requestUrl);
         ResponseEntity<String> weatherInJson = restTemplate.getForEntity(url, String.class);
         log.info("Received response from " + requestUrl + "\n" + weatherInJson);
-        ObjectMapper objectMapper = new ObjectMapper();
+
         JsonNode rootNode = objectMapper.readTree(weatherInJson.getBody());
         ArrayNode jsonWeatherArray = (ArrayNode) rootNode.get("weather");
         currentWeather.setResponseStatus(rootNode.path("cod").asInt());

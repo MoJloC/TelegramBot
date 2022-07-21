@@ -27,19 +27,7 @@ public class MessageHandler {
             throw new IllegalArgumentException();
         }
 
-        BotApiMethod<?> botApiMethod = null;
-
-        try {
-            botApiMethod = messageResponseHandler.messageResponse(incomingMessage);
-        } catch (NoSuchMethodException e) {
-            log.error("NoSuchMethodException from messageResponseHandler.messageResponse(incomingMessage)", e);
-        } catch (InvocationTargetException e) {
-            log.error("InvocationTargetException from messageResponseHandler.messageResponse(incomingMessage)", e);
-        } catch (InstantiationException e) {
-            log.error("InstantiationException from messageResponseHandler.messageResponse(incomingMessage)", e);
-        } catch (IllegalAccessException e) {
-            log.error("IllegalAccessException from messageResponseHandler.messageResponse(incomingMessage)", e);
-        }
+        BotApiMethod<?> botApiMethod = messageResponseHandler.messageResponse(incomingMessage);
 
         return botApiMethod;
     }

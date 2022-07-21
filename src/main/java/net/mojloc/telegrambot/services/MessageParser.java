@@ -1,10 +1,13 @@
 package net.mojloc.telegrambot.services;
 
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component("messageParser")
 @NoArgsConstructor
 public class MessageParser {
 

@@ -17,19 +17,19 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 
-@Service("weatherCommandHandler")
+@Service("weatherForecastCommandHandler")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-public class WeatherCommandHandler extends CommandHandler{
+public class WeatherForecastCommandHandler extends CommandHandler{
     WeatherRequester weatherRequester;
     MessageParser messageParser;
     WeatherJsonParser weatherJsonParser;
 
-    String command = Commands.WEATHER.getCommand();
+    String command = Commands.WEATHER_FORECAST.getCommand();
 
     @Autowired
-    public WeatherCommandHandler(WeatherRequester weatherRequester, MessageParser messageParser,
-                                 @Qualifier("currentWeatherJsonParser") WeatherJsonParser weatherJsonParser) {
+    public WeatherForecastCommandHandler(WeatherRequester weatherRequester, MessageParser messageParser,
+                                         @Qualifier("weatherForecastJsonParser") WeatherJsonParser weatherJsonParser) {
         this.weatherRequester = weatherRequester;
         this.messageParser = messageParser;
         this.weatherJsonParser = weatherJsonParser;
@@ -51,14 +51,14 @@ public class WeatherCommandHandler extends CommandHandler{
         String cityName = attributes.get(0);
 
         try {
-            log.info("Current weather request for City " + attributes.get(0) +
-                     " from user " + incomingMessage.getFrom().getFirstName() +
-                     " " + incomingMessage.getFrom().getLastName());
+            log.info("Weather forecast request for City " + attributes.get(0) +
+                    " from user " + incomingMessage.getFrom().getFirstName() +
+                    " " + incomingMessage.getFrom().getLastName());
 
-            String typeOfRequest = "weather";
+            String typeOfRequest = "forecast";
             ResponseEntity<String> responseFromWeatherProvider = weatherRequester.getWeather(cityName, typeOfRequest);
-            Weather currentWeather = weatherJsonParser.parseJson(responseFromWeatherProvider);
-            sendMessage.setText(currentWeather.prepareMessageText());
+            Weather weatherForecast = weatherJsonParser.parseJson(responseFromWeatherProvider);
+            sendMessage.setText(weatherForecast.prepareMessageText());
 
             log.info("Request completed successfully");
         } catch (JsonProcessingException e) {
@@ -67,9 +67,9 @@ public class WeatherCommandHandler extends CommandHandler{
             return sendMessage;
         } catch (HttpClientErrorException e) {
             log.warn("Request completed but there is no such city (" + attributes.get(0) + ")" +
-                     " in weather provider database");
+                    " in weather provider database");
             sendMessage.setText("Вы ввели название города: " + attributes.get(0) +
-                                ". " + Messages.WRONG_CITY_NAME.getMessage());
+                    ". " + Messages.WRONG_CITY_NAME.getMessage());
         }
 
         return sendMessage;

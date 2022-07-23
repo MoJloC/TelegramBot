@@ -1,13 +1,8 @@
 package net.mojloc.telegrambot.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.mojloc.telegrambot.model.CurrentWeather;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,14 +23,9 @@ public class WeatherRequester {
         this.apiKey = apiKey;
     }
 
-    public ResponseEntity<String> getCurrentWeather (String cityName) throws HttpClientErrorException {
+    public ResponseEntity<String> getWeather (String cityName, String typeOfRequest) throws HttpClientErrorException {
 
-        String url = new StringBuilder().append(requestUrl)
-                                        .append("weather?q=")
-                                        .append(cityName)
-                                        .append("&lang=ru&appid=")
-                                        .append(apiKey)
-                                        .toString();
+        String url = requestUrl + typeOfRequest + "?q=" + cityName + "&lang=ru&appid=" + apiKey;
 
         log.info("Sending request for current weather to " + requestUrl);
         ResponseEntity<String> weatherInJson = restTemplate.getForEntity(url, String.class);

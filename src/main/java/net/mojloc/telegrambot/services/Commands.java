@@ -5,7 +5,8 @@ public enum Commands {
     EMPTY_COMMAND("empty", EmptyCommandHandler.class),
     START("/start", StartCommandHandler.class),
     STROKE("/stroke", StrokeCommandHandler.class),
-    WEATHER("/weather", WeatherCommandHandler.class);
+    WEATHER("/weather", WeatherCommandHandler.class),
+    WEATHER_FORECAST("/weatherf", WeatherForecastCommandHandler.class);
 
     private final String command;
     private final Class<? extends CommandHandler> commandHandlerClass;
@@ -23,3 +24,13 @@ public enum Commands {
         return commandHandlerClass;
     }
 }
+
+/*
+For list of commands at @BotFather
+
+start - поздороваться с Шушей
+stroke - погладить Шушу
+weather - погода сейчас (название города через пробел)
+weatherf - прогноз погоды на ближайшие 3 дня
+
+*/

@@ -14,6 +14,7 @@ public class StrokeCommandHandler extends CommandHandler{
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(incomingMessage.getChatId()));
 
+    // TODO: Change the syntax of switch command to Pattern-Matching if Java version of the app is changed to 14 and higher
         switch (strokeCount) {
             case (1) :
                 sendMessage.setText(Messages.ON_STROKE1.getMessage());

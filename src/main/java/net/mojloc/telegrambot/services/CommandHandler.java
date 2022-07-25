@@ -6,5 +6,5 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public abstract class CommandHandler {
     static int strokeCount = 1;
 
-    abstract BotApiMethod<?> commandHandler(Message incomingMessage);
+    abstract BotApiMethod<?> commandHandler(Message incomingMessage, String updateId);
 }

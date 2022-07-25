@@ -23,15 +23,14 @@ public class WeatherRequester {
         this.apiKey = apiKey;
     }
 
-    public ResponseEntity<String> getWeather (String cityName, String typeOfRequest) throws HttpClientErrorException {
+    public ResponseEntity<String> getWeather (String cityName, String typeOfRequest, String updateId) throws HttpClientErrorException {
 
         String url = requestUrl + typeOfRequest + "?q=" + cityName + "&lang=ru&appid=" + apiKey;
 
-        log.info("Sending request for current weather to " + requestUrl);
+        log.info("Update ID " + updateId + ": sending request for current weather to " + requestUrl);
         ResponseEntity<String> weatherInJson = restTemplate.getForEntity(url, String.class);
-        log.info("Received response from " + requestUrl + "\n" + weatherInJson);
+        log.info("Update ID " + updateId + ": received response from " + requestUrl + "\n" + weatherInJson);
 
         return weatherInJson;
-
     }
 }

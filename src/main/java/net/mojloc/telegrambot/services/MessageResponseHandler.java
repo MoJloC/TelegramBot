@@ -21,13 +21,13 @@ public class MessageResponseHandler {
         this.context = context;
     }
 
-    public BotApiMethod<?> messageResponse (Message incomingMessage) {
+    public BotApiMethod<?> messageResponse (Message incomingMessage, String updateId) {
 
         Class<? extends CommandHandler> commandHandlerClass = detectionClassOfCommandHandler(incomingMessage.getText());
 
         CommandHandler commandHandler = context.getBean(commandHandlerClass);
 
-        return commandHandler.commandHandler(incomingMessage);
+        return commandHandler.commandHandler(incomingMessage, updateId);
     }
 
     private Class<? extends CommandHandler> detectionClassOfCommandHandler (String incomingMessageText) {

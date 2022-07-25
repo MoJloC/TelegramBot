@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Objects;
+
 @RestController
 /*
 At @RequestMapping used "/callback" instead of "/rest/v1" because of strange realisation of API method
@@ -30,12 +32,21 @@ public class TelegramBotRestController {
 
     @PostMapping("/")
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update, RequestEntity<String> request) {
-        log.info("********************** Parameters of Request ********************** ");
-        log.info("Url: " + request.getUrl());
-        log.info("Body: " + request.getBody());
-        log.info("Headers: " + request.getHeaders());
-        log.info("Method: " + request.getMethod());
-        log.info("************************ End of parameters ************************ ");
+
+        log.info("Update ID " + update.getUpdateId()
+                + ": received. Content-Type " + request.getHeaders().getContentType()
+                + ". HTTP method " + request.getMethod()
+                + ". URL: " + request.getUrl());
+
+        if (!telegramBot.getSetWebhook().getSecretToken().equals(Objects.requireNonNull(request.getHeaders()
+                                                                 .get("x-telegram-bot-api-secret-token")).get(0))) {
+            log.error("Update ID " + update.getUpdateId() + ": Warning!!! Secret key at Update object incorrect:\n"
+                      + Objects.requireNonNull(request.getHeaders().get("x-telegram-bot-api-secret-token")).get(0)
+                      + " instead of " + telegramBot.getSetWebhook().getSecretToken()
+                      + "\n Update object rejected!");
+            return null;
+        }
+
         return telegramBot.onWebhookUpdateReceived(update);
     }
 }

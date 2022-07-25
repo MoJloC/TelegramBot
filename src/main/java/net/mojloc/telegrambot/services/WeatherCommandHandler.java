@@ -36,14 +36,21 @@ public class WeatherCommandHandler extends CommandHandler{
     }
 
     @Override
-    BotApiMethod<?> commandHandler(Message incomingMessage) {
+    BotApiMethod<?> commandHandler(Message incomingMessage, String updateId) {
         strokeCount=1;
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(incomingMessage.getChatId());
         List<String> attributes = messageParser.searchForCommandAttributes(incomingMessage.getText(), command);
 
+        log.info("Update ID " + updateId + ": message text contains the command /weather from user "
+                 + incomingMessage.getFrom().getFirstName()
+                 + " " + incomingMessage.getFrom().getLastName()
+                 + ". Starting processing");
+
         if (attributes.size()==0) {
             sendMessage.setText(Messages.NEED_CITY.getMessage());
+            log.info("Update ID " + updateId + ": weather request can't be completed due empty information about"
+                     + " city name. Prepared regular notification for user");
 
             return sendMessage;
         }
@@ -51,23 +58,24 @@ public class WeatherCommandHandler extends CommandHandler{
         String cityName = attributes.get(0);
 
         try {
-            log.info("Current weather request for City " + attributes.get(0) +
-                     " from user " + incomingMessage.getFrom().getFirstName() +
-                     " " + incomingMessage.getFrom().getLastName());
+            log.info("Update ID " + updateId + ": prepared weather request for City " + attributes.get(0));
 
             String typeOfRequest = "weather";
-            ResponseEntity<String> responseFromWeatherProvider = weatherRequester.getWeather(cityName, typeOfRequest);
+            ResponseEntity<String> responseFromWeatherProvider = weatherRequester.getWeather(cityName, typeOfRequest,
+                                                                                             updateId);
             Weather currentWeather = weatherJsonParser.parseJson(responseFromWeatherProvider);
             sendMessage.setText(currentWeather.prepareMessageText());
 
-            log.info("Request completed successfully");
+            log.info("Update ID " + updateId + ": weather request successfully completed and submitted"
+                     + " for transmission to the user");
+
         } catch (JsonProcessingException e) {
-            log.error("Error in JSON processing at WeatherRequester!", e);
+            log.error("Update ID " + updateId + ": error in JSON processing at WeatherRequester!", e);
             sendMessage.setText(Messages.PRINT_WEATHER_ERROR.getMessage());
             return sendMessage;
         } catch (HttpClientErrorException e) {
-            log.warn("Request completed but there is no such city (" + attributes.get(0) + ")" +
-                     " in weather provider database");
+            log.info("Update ID " + updateId + ": weather request completed but there is no such city ("
+                     + attributes.get(0) + ")" + " in weather provider database. Prepared regular notification for user");
             sendMessage.setText("Вы ввели название города: " + attributes.get(0) +
                                 ". " + Messages.WRONG_CITY_NAME.getMessage());
         }

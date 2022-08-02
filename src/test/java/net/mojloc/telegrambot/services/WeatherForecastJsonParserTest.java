@@ -1,11 +1,9 @@
 package net.mojloc.telegrambot.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import net.mojloc.telegrambot.model.WeatherForecast;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -65,9 +63,9 @@ class WeatherForecastJsonParserTest {
     public void testApproachToParseJsonArray() throws JsonProcessingException {
         List<String> result = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDate.now().atTime(00,00,00);
-        LocalDateTime dateTime1 = LocalDate.now().atTime(06,00,00);
-        LocalDateTime dateTime2 = LocalDate.now().atTime(12,00,00);
+        LocalDateTime dateTime = LocalDate.now().withDayOfMonth(23).atTime(00,00,00);
+        LocalDateTime dateTime1 = LocalDate.now().withDayOfMonth(23).atTime(06,00,00);
+        LocalDateTime dateTime2 = LocalDate.now().withDayOfMonth(23).atTime(12,00,00);
 
         for (long i = 1; i<=3; i++) {
             result.add(dateTime.plusDays(i).format(formatter));

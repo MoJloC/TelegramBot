@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MessageParser {
 
-    public List<String> searchForCommandAttributes (String messageText, String command) {
+    public List<String> searchForCommandAttributes (String messageText, String command, int limit) {
 
         return Arrays.stream(messageText.split(" ")).dropWhile((word) -> !word.equals(command))
                 .dropWhile((w) -> w.equals(command))
-                .limit(3)
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 }

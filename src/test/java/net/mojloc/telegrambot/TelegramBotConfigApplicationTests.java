@@ -38,8 +38,8 @@ class TelegramBotConfigApplicationTests {
     @Test
     void testWebConnection() {
 
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/rest/v1/ConnectionTest",
-                                                              "", String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/callback/rest/v1/ConnectionTest",
+                                                                     "", String.class);
         log.info("************************* " + response.getStatusCodeValue() + " *************************");
         Assertions.assertEquals(200, response.getStatusCodeValue());
     }

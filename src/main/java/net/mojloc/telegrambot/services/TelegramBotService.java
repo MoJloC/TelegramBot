@@ -14,10 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @FieldDefaults (makeFinal = true, level = AccessLevel.PRIVATE)
 public class TelegramBotService {
     MessageHandler messageHandler;
+    CallbackQueryHandler callbackQueryHandler;
 
     @Autowired
-    public TelegramBotService(MessageHandler messageHandler) {
+    public TelegramBotService(MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler) {
         this.messageHandler = messageHandler;
+        this.callbackQueryHandler = callbackQueryHandler;
     }
 
     public BotApiMethod<?> handleUpdate(Update update) {
@@ -37,9 +39,10 @@ public class TelegramBotService {
         log.debug("Has MyChatMember: " + update.hasMyChatMember());
 
         if (update.hasCallbackQuery()) {
-            log.info("Update ID " + update.getUpdateId() + ": contains CallbackQuery object");
+            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getCallbackQuery().getFrom().getFirstName()
+                     + " contains CallbackQuery object");
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            return null;
+            return callbackQueryHandler.handleCallbackQuery(callbackQuery, String.valueOf(update.getUpdateId()));
 
         } else if (update.hasMyChatMember()) {
             log.info("Update ID " + update.getUpdateId() + ": contains MyChatMember information");
@@ -52,11 +55,13 @@ public class TelegramBotService {
             return null;
 
         } else if (update.hasMessage() ) {
-            log.info("Update ID " + update.getUpdateId() + ": contains Message object");
+            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getMessage().getFrom().getFirstName()
+                     + " contains Message object");
             return messageHandler.onMessageReceived(update.getMessage(), String.valueOf(update.getUpdateId()));
 
         } else if (update.hasEditedMessage()) {
-            log.info("Update ID " + update.getUpdateId() + ": contains EditedMessage object");
+            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getEditedMessage().getFrom().getFirstName()
+                     + " contains EditedMessage object");
             return messageHandler.onMessageReceived(update.getEditedMessage(), String.valueOf(update.getUpdateId()));
 
         } else {

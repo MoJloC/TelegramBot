@@ -36,7 +36,10 @@ public class StrokeCommandHandler extends CommandHandler{
             strokeCount++;
         }
 
-        log.info("Update ID " + updateId + ": message text contains the command /stroke."
+        log.info("Update ID " + updateId + ": message text contains the command /stroke from user "
+                 + incomingMessage.getFrom().getFirstName()
+                 + " " + incomingMessage.getFrom().getLastName()
+                 + " (user_id: " + incomingMessage.getFrom().getId() + "). "
                  + "A regular response has been sent.");
 
         return sendMessage;

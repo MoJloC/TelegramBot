@@ -18,8 +18,11 @@ public class StartCommandHandler extends CommandHandler{
         sendMessage.setChatId(String.valueOf(incomingMessage.getChatId()));
         sendMessage.setText(Messages.GREETING.getMessage());
 
-        log.info("Update ID " + updateId + ": message text contains the command /start."
-                  + "A regular response has been sent.");
+        log.info("Update ID " + updateId + ": message text contains the command /start from user "
+                 + incomingMessage.getFrom().getFirstName()
+                 + " " + incomingMessage.getFrom().getLastName()
+                 + " (user_id: " + incomingMessage.getFrom().getId() + "). "
+                 + "A regular response has been sent.");
 
         return sendMessage;
     }

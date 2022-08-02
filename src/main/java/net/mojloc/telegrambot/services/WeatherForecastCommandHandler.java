@@ -40,11 +40,12 @@ public class WeatherForecastCommandHandler extends CommandHandler{
         strokeCount=1;
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(incomingMessage.getChatId());
-        List<String> attributes = messageParser.searchForCommandAttributes(incomingMessage.getText(), command);
+        List<String> attributes = messageParser.searchForCommandAttributes(incomingMessage.getText(), command, 1);
 
         log.info("Update ID " + updateId + ": message text contains the command /weatherf from user "
                  + incomingMessage.getFrom().getFirstName()
                  + " " + incomingMessage.getFrom().getLastName()
+                 + " (user_id: " + incomingMessage.getFrom().getId() + ") "
                  + ". Starting processing");
 
         if (attributes.size()==0) {

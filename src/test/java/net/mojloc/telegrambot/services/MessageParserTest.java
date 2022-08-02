@@ -14,7 +14,7 @@ class MessageParserTest {
 
     @Test
     public void testSearchForCommandAttributes() {
-        List<String> commandAttributes = messageParser.searchForCommandAttributes(messageText, command);
+        List<String> commandAttributes = messageParser.searchForCommandAttributes(messageText, command, 1);
         System.out.println(commandAttributes);
         assertEquals(1, commandAttributes.size());
         assertEquals("Томск", commandAttributes.get(0));
@@ -22,7 +22,7 @@ class MessageParserTest {
 
     @Test
     public void testSearchForCommandAttributes2() {
-        List<String> commandAttributes = messageParser.searchForCommandAttributes(messageText1, command1);
+        List<String> commandAttributes = messageParser.searchForCommandAttributes(messageText1, command1, 1);
         System.out.println(commandAttributes);
         assertEquals(0, commandAttributes.size());
     }

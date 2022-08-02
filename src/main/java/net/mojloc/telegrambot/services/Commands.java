@@ -6,7 +6,8 @@ public enum Commands {
     START("/start", StartCommandHandler.class),
     STROKE("/stroke", StrokeCommandHandler.class),
     WEATHER("/weather", WeatherCommandHandler.class),
-    WEATHER_FORECAST("/weatherf", WeatherForecastCommandHandler.class);
+    WEATHER_FORECAST("/weatherf", WeatherForecastCommandHandler.class),
+    QUIZ("/quiz", QuizCommandHandler.class);
 
     private final String command;
     private final Class<? extends CommandHandler> commandHandlerClass;
@@ -32,5 +33,6 @@ start - поздороваться с Шушей
 stroke - погладить Шушу
 weather - погода сейчас (название города через пробел)
 weatherf - прогноз погоды на ближайшие 3 дня
+quiz - Викторина. Для доп.информации: /quiz help
 
 */

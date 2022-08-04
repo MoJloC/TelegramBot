@@ -161,7 +161,7 @@ public class QuizHandler {
 
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText("Завершить викторину");
-        button.setCallbackData(generalDataText + " Finish");
+        button.setCallbackData(generalDataText + " Finish " + currentNumberOfQuestion);
         inlineKeyboardButtonsRowThree.add(button);
 
         keyboardWithQuestions.setKeyboard(List.of(inlineKeyboardButtonsRowOne, inlineKeyboardButtonsRowTwo

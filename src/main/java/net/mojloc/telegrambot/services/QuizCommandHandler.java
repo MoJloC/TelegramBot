@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.mojloc.telegrambot.Dao.QuestionsForQuizDao;
-import net.mojloc.telegrambot.Dao.QuizResultsDao;
+import net.mojloc.telegrambot.dao.QuestionsForQuizDao;
+import net.mojloc.telegrambot.dao.QuizResultsDao;
 import net.mojloc.telegrambot.entities.QuizResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,13 +67,14 @@ public class QuizCommandHandler extends CommandHandler{
     @Override
     public BotApiMethod<?> commandHandler(Message incomingMessage, String updateId) {
         strokeCount = 1;
+        String responseMessage = "";
+        Long userId = incomingMessage.getFrom().getId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(incomingMessage.getChatId());
-        String responseMessage = "";
         List<String> attributes = messageParser.searchForCommandAttributes(incomingMessage.getText(), command, 1);
 
         if (attributes.size()==0) {
-            if (cacheForQuizHandlers.containsKey(incomingMessage.getFrom().getId())) {
+            if (cacheForQuizHandlers.containsKey(userId)) {
                 responseMessage = "Вы уже принимаете участие в викторине. Участие более чем в одной викторине одновременно"
                         + " не допускается";
                 sendMessage.setText(responseMessage);
@@ -102,6 +103,7 @@ public class QuizCommandHandler extends CommandHandler{
         if (commandAttribute.equals("help")) {
             responseMessage = "Для начала игры наберите: /quiz\n"
                               + "Для просмотра информации по дополнительным возможностям наберите: /quiz help\n"
+                              + "Для выхода из Викторины с помощью команды наберите: /quiz exit\n"
                               + "Для просмотра всех своих результатов наберите: /quiz 0\n"
                               + "Для просмотра лучших результатов по всем игрокам наберите: /quiz x, где x - любая цифра, кроме 0\n";
             sendMessage.setText(responseMessage);
@@ -112,6 +114,28 @@ public class QuizCommandHandler extends CommandHandler{
                     + " (user_id: " + incomingMessage.getFrom().getId() + "). A regular response has been sent");
             
             return sendMessage;
+        }
+
+        if (commandAttribute.equals("exit")) {
+            if (cacheForQuizHandlers.containsKey(userId)) {
+                log.info("Update ID " + updateId + ": message text contains the command /quiz with attribute \"exit\" from user "
+                        + incomingMessage.getFrom().getFirstName()
+                        + " " + incomingMessage.getFrom().getLastName()
+                        + " (user_id: " + incomingMessage.getFrom().getId() + "). Processing..");
+
+                return cacheForQuizHandlers.get(userId).finishQuiz(String.valueOf(incomingMessage.getChatId()),updateId,0);
+            } else {
+                responseMessage = "Мяф... Вы ещё не принимаете участия в Викторине. Наберите, пожалуйста, /quiz для старта";
+                sendMessage.setText(responseMessage);
+
+                log.info("Update ID " + updateId + ": message text contains the command /quiz with attribute \"exit\" from user "
+                         + incomingMessage.getFrom().getFirstName()
+                         + " " + incomingMessage.getFrom().getLastName()
+                         + " (user_id: " + incomingMessage.getFrom().getId() + "). No entries found. A regular response "
+                         + "has been sent");
+
+                return sendMessage;
+            }
         }
 
         try {
@@ -180,7 +204,7 @@ public class QuizCommandHandler extends CommandHandler{
         if (currentUserQuizHandler==null) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
-            sendMessage.setText("Мяф... Вы ещё не принимаете участия в Викторине. Наберите, пожалуйста, /quiz для старта ");
+            sendMessage.setText("Мяф... Вы ещё не принимаете участия в Викторине. Наберите, пожалуйста, /quiz для старта");
 
             log.info("Update ID " + updateId + ": user with Id " + userId + " try to use old messages of closed Quiz. "
                     + "A regular response has been sent.");

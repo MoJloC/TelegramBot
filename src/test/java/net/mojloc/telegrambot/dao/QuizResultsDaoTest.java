@@ -1,4 +1,4 @@
-package net.mojloc.telegrambot.Dao;
+package net.mojloc.telegrambot.dao;
 
 import net.mojloc.telegrambot.entities.QuizResults;
 import org.junit.jupiter.api.Test;

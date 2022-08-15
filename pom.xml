@@ -10,7 +10,7 @@
     </parent>
     <groupId>net.mojloc</groupId>
     <artifactId>TelegramBot</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>TelegramBot</name>
     <description>TelegramBot</description>
     <properties>

@@ -18,12 +18,11 @@ import java.util.List;
 
 @Service("weatherForecastJsonParser")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WeatherForecastJsonParser implements WeatherJsonParser{
-    List<String> datesAndTimeStamps=new ListOfDatesAndTimeStampsProvider().provideList();
-
+public class WeatherForecastJsonParser implements WeatherJsonParser {
 
     @Override
     public Weather parseJson(ResponseEntity<String> responseEntity) throws JsonProcessingException {
+        List<String> datesAndTimeStamps=new ListOfDatesAndTimeStampsProvider().provideList();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseEntity.getBody());
 

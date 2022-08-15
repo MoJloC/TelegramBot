@@ -1,4 +1,4 @@
-package net.mojloc.telegrambot.Dao;
+package net.mojloc.telegrambot.dao;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

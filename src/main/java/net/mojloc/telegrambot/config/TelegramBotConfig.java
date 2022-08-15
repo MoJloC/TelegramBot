@@ -1,4 +1,4 @@
-package net.mojloc.telegrambot.Config;
+package net.mojloc.telegrambot.config;
 
 import lombok.AccessLevel;
 import lombok.Getter;

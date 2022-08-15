@@ -1,7 +1,6 @@
-package net.mojloc.telegrambot.Dao;
+package net.mojloc.telegrambot.dao;
 
 import net.mojloc.telegrambot.entities.QuestionsForQuiz;
-import net.mojloc.telegrambot.entities.QuizResults;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

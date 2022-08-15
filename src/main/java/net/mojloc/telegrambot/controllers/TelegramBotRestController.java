@@ -1,4 +1,4 @@
-package net.mojloc.telegrambot.Controllers;
+package net.mojloc.telegrambot.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import net.mojloc.telegrambot.model.TelegramBot;

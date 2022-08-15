@@ -1,6 +1,6 @@
 package net.mojloc.telegrambot;
 
-import net.mojloc.telegrambot.Config.TelegramBotConfig;
+import net.mojloc.telegrambot.config.TelegramBotConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

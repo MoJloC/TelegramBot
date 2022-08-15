@@ -39,7 +39,7 @@ public class TelegramBotService {
         log.debug("Has MyChatMember: " + update.hasMyChatMember());
 
         if (update.hasCallbackQuery()) {
-            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getCallbackQuery().getFrom().getFirstName()
+            log.info("Update ID " + update.getUpdateId() + ": from user " + update.getCallbackQuery().getFrom().getFirstName()
                      + " contains CallbackQuery object");
             CallbackQuery callbackQuery = update.getCallbackQuery();
             return callbackQueryHandler.handleCallbackQuery(callbackQuery, String.valueOf(update.getUpdateId()));
@@ -55,12 +55,12 @@ public class TelegramBotService {
             return null;
 
         } else if (update.hasMessage() ) {
-            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getMessage().getFrom().getFirstName()
+            log.info("Update ID " + update.getUpdateId() + ": from user " + update.getMessage().getFrom().getFirstName()
                      + " contains Message object");
             return messageHandler.onMessageReceived(update.getMessage(), String.valueOf(update.getUpdateId()));
 
         } else if (update.hasEditedMessage()) {
-            log.info("Update ID " + update.getUpdateId() + ": fom user " + update.getEditedMessage().getFrom().getFirstName()
+            log.info("Update ID " + update.getUpdateId() + ": from user " + update.getEditedMessage().getFrom().getFirstName()
                      + " contains EditedMessage object");
             return messageHandler.onMessageReceived(update.getEditedMessage(), String.valueOf(update.getUpdateId()));
 

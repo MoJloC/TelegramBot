@@ -3,8 +3,8 @@ package net.mojloc.telegrambot.services;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.mojloc.telegrambot.Dao.QuestionsForQuizDao;
-import net.mojloc.telegrambot.Dao.QuizResultsDao;
+import net.mojloc.telegrambot.dao.QuestionsForQuizDao;
+import net.mojloc.telegrambot.dao.QuizResultsDao;
 import net.mojloc.telegrambot.entities.QuestionsForQuiz;
 import net.mojloc.telegrambot.entities.QuizResults;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -119,7 +119,7 @@ public class QuizHandler {
             case (1):
                 messageAboutEndOfTheQuiz.setText("Вы правильно ответили на все вопросы Викторины! Ваш замуррррчательный "
                                                  + "результат в " + quizScore + " баллов я сохранила в таблице результатов."
-                                                 + "Поздравляем и обязательно добавим ещё интересных вопросов в виторину!");
+                                                 + " Поздравляем и обязательно добавим ещё интересных вопросов в виторину!");
                 log.info("Update ID " + updateId + ": user with Id " + userId + " successfully completed the Quiz. A "
                          + "regular notification has been sent.");
                 break;

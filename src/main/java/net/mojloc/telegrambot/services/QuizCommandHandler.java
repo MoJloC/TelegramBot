@@ -45,25 +45,6 @@ public class QuizCommandHandler extends CommandHandler{
         cacheForQuizHandlers.remove(userId);
     }
 
-    private QuizHandler setQuizHandler(Message incomingMessage) {
-        Long currentUserId = incomingMessage.getFrom().getId();
-        QuizResults currentUserQuizResults = new QuizResults();
-        currentUserQuizResults.setUserId(currentUserId);
-        currentUserQuizResults.setUserFirstName(incomingMessage.getFrom().getFirstName());
-        currentUserQuizResults.setUserLastName(incomingMessage.getFrom().getLastName());
-        currentUserQuizResults.setUserNickname(incomingMessage.getFrom().getUserName());
-
-        QuizHandler currentUserQuizHandler = new QuizHandler(quizResultsDao, questionsForQuizDao, currentUserQuizResults);
-
-        cacheForQuizHandlers.put(currentUserId, currentUserQuizHandler);
-
-        return currentUserQuizHandler;
-    }
-
-    private QuizHandler getQuizHandler(Long userId) {
-        return cacheForQuizHandlers.get(userId);
-    }
-
     @Override
     public BotApiMethod<?> commandHandler(Message incomingMessage, String updateId) {
         strokeCount = 1;
@@ -112,7 +93,7 @@ public class QuizCommandHandler extends CommandHandler{
                     + incomingMessage.getFrom().getFirstName()
                     + " " + incomingMessage.getFrom().getLastName()
                     + " (user_id: " + incomingMessage.getFrom().getId() + "). A regular response has been sent");
-            
+
             return sendMessage;
         }
 
@@ -196,6 +177,21 @@ public class QuizCommandHandler extends CommandHandler{
         }
     }
 
+    private QuizHandler setQuizHandler(Message incomingMessage) {
+        Long currentUserId = incomingMessage.getFrom().getId();
+        QuizResults currentUserQuizResults = new QuizResults();
+        currentUserQuizResults.setUserId(currentUserId);
+        currentUserQuizResults.setUserFirstName(incomingMessage.getFrom().getFirstName());
+        currentUserQuizResults.setUserLastName(incomingMessage.getFrom().getLastName());
+        currentUserQuizResults.setUserNickname(incomingMessage.getFrom().getUserName());
+
+        QuizHandler currentUserQuizHandler = new QuizHandler(quizResultsDao, questionsForQuizDao, currentUserQuizResults);
+
+        cacheForQuizHandlers.put(currentUserId, currentUserQuizHandler);
+
+        return currentUserQuizHandler;
+    }
+
     public BotApiMethod<?> callbackQueryHandler(CallbackQuery callbackQuery, String updateId) {
         Long userId = callbackQuery.getFrom().getId();
         String chatId = String.valueOf(callbackQuery.getMessage().getChatId());
@@ -260,5 +256,9 @@ public class QuizCommandHandler extends CommandHandler{
 
          return sendMessage;
         }
+    }
+
+    private QuizHandler getQuizHandler(Long userId) {
+        return cacheForQuizHandlers.get(userId);
     }
 }

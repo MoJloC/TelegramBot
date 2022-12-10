@@ -22,22 +22,17 @@ public class MessageResponseHandler {
     }
 
     public BotApiMethod<?> messageResponse (Message incomingMessage, String updateId) {
-
         Class<? extends CommandHandler> commandHandlerClass = detectionClassOfCommandHandler(incomingMessage.getText());
-
         CommandHandler commandHandler = context.getBean(commandHandlerClass);
-
         return commandHandler.commandHandler(incomingMessage, updateId);
     }
 
     private Class<? extends CommandHandler> detectionClassOfCommandHandler (String incomingMessageText) {
-
         Commands command = Arrays.stream(Commands.values())
                                         .filter((c) -> Arrays.asList(incomingMessageText.split(" "))
                                                        .contains(c.getCommand()))
                                         .findFirst()
                                         .orElse(Commands.EMPTY_COMMAND);
-
 
         return command.getCommandHandlerClass();
     }

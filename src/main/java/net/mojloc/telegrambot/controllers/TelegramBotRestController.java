@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @RestController
 /*
-At @RequestMapping used "/callback" instead of "/rest/v1" because of strange realisation of API method
+At @RequestMapping used "/callback/rest/v1" instead of "/rest/v1" because of strange realisation of API method
  getBotUrl(String externalUrl, String botPath) at public final class WebhookUtil
  */
 @RequestMapping("/callback/rest/v1")

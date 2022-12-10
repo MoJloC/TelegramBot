@@ -1,7 +1,6 @@
 package net.mojloc.telegrambot.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -43,18 +42,16 @@ public class WeatherForecastJsonParser implements WeatherJsonParser {
             tempCounter++;
         }
 
-        Iterator<Integer> iterator = arrayForIndexes.iterator();
-        while (iterator.hasNext()) {
-            int index = iterator.next();
+        for (int index : arrayForIndexes) {
             weatherForecast.getVisibility().add(innerList.get(index).path("visibility").asText());
-            weatherForecast.getTemp().add(innerList.get(index).path("main").path("temp").asInt()-273);
-            weatherForecast.getTempFeelsLike().add(innerList.get(index).path("main").path("feels_like").asInt()-273);
+            weatherForecast.getTemp().add(innerList.get(index).path("main").path("temp").asInt() - 273);
+            weatherForecast.getTempFeelsLike().add(innerList.get(index).path("main").path("feels_like").asInt() - 273);
             weatherForecast.getPressure().add(innerList.get(index).path("main").path("pressure").asInt());
             weatherForecast.getHumidity().add(innerList.get(index).path("main").path("humidity").asInt());
-            weatherForecast.getProbabilityOfPrecipitation().add(innerList.get(index).path("pop").asInt()*100);
+            weatherForecast.getProbabilityOfPrecipitation().add(innerList.get(index).path("pop").asInt() * 100);
             weatherForecast.getWindSpeed().add(innerList.get(index).path("wind").path("speed").asText());
             weatherForecast.getDescription().add(innerList.get(index).get("weather")
-                                                                     .get(0).path("description").asText());
+                    .get(0).path("description").asText());
         }
 
         return weatherForecast;

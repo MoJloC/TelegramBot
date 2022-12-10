@@ -38,6 +38,11 @@ public class QuizHandler {
         prepareQuestionsList();
     }
 
+    private void prepareQuestionsList() {
+        questionsForQuiz = questionsForQuizDao.getAllQuestionsList();
+        Collections.shuffle(questionsForQuiz);
+    }
+
     public int getCurrentNumberOfQuestion() {
         return currentNumberOfQuestion;
     }
@@ -47,6 +52,25 @@ public class QuizHandler {
         log.info("Update ID " + updateId + ": starting new Quiz for user with Id " + userId);
 
         return startQuiz(sendMessage, updateId);
+    }
+
+    private BotApiMethod<?> startQuiz(SendMessage sendMessage, String updateId) {
+        if (questionsForQuiz.size() == 0) {
+            log.warn("Update ID " + updateId + ": user with Id " + userId + " has no way to start Quiz: "
+                    + "List questionsForQuiz is empty!!!");
+            sendMessage.setText("Мя... Что-то пошло совсем не так и я не могу нацарапать ни один вопрос. Мы обязательно "
+                    + "с этим разберёмся в ближайшее время!");
+        } else {
+            QuestionsForQuiz currentQuestion = questionsForQuiz.remove(0);
+            InlineKeyboardMarkup keyboardForCurrentQuestion = prepareInlineKeyboard(currentQuestion);
+            sendMessage.setText(currentQuestion.getQuestion());
+            sendMessage.setReplyMarkup(keyboardForCurrentQuestion);
+
+            log.info("Update ID " + updateId + ": first question has been prepared for transmission to user with Id "
+                    + userId);
+        }
+
+        return sendMessage;
     }
 
     public BotApiMethod<?> nextQuizQuestion(String chatId, String updateId) {
@@ -70,30 +94,6 @@ public class QuizHandler {
                 + userId);
 
         return nextQuizQuestion;
-    }
-
-    private void prepareQuestionsList() {
-        questionsForQuiz = questionsForQuizDao.getAllQuestionsList();
-        Collections.shuffle(questionsForQuiz);
-    }
-
-    private BotApiMethod<?> startQuiz(SendMessage sendMessage, String updateId) {
-        if (questionsForQuiz.size() == 0) {
-            log.warn("Update ID " + updateId + ": user with Id " + userId + " has no way to start Quiz: "
-                     + "List questionsForQuiz is empty!!!");
-            sendMessage.setText("Мя... Что-то пошло совсем не так и я не могу нацарапать ни один вопрос. Мы обязательно "
-                                + "с этим разберёмся в ближайшее время!");
-        } else {
-            QuestionsForQuiz currentQuestion = questionsForQuiz.remove(0);
-            InlineKeyboardMarkup keyboardForCurrentQuestion = prepareInlineKeyboard(currentQuestion);
-            sendMessage.setText(currentQuestion.getQuestion());
-            sendMessage.setReplyMarkup(keyboardForCurrentQuestion);
-
-            log.info("Update ID " + updateId + ": first question has been prepared for transmission to user with Id "
-                     + userId);
-        }
-
-        return sendMessage;
     }
 
     BotApiMethod<?> finishQuiz(String chatId, String updateId, int typeOfFinish) {
